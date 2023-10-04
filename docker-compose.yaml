@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  backend:                            # container 1
+    build: ./chat-app/backend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./backend:/app
+  frontend:                           # container 2
+    build: ./chat-app/frontend
+    links:                        # this will link to the backend container
+      - backend
+    ports:
+      - '8000:80'
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+  mainpage:                          # container 3
+    build: .
+    ports:
+      - '8080:80'
+    links:
+      - frontend
+      - backend
